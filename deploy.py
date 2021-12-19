@@ -42,7 +42,7 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 # For connecting to Ganache
 w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
 chain_id = 1337
-my_address = "0x4f8fACcb4C16A8e5788eCEC16f0B9D2dBBd44B22"
+my_address = os.getenv("MY_ADDRESS")
 private_key = os.getenv("PRIVATE_KEY")
 # !!!private key is public here because theres no real money, and it is a local chain.
 
