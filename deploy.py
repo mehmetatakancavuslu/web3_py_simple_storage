@@ -1,6 +1,7 @@
 from solcx import compile_standard, install_solc
 import json
 from web3 import Web3
+import os
 
 with open("./SimpleStorage.sol", "r") as file:
     simple_storage_file = file.read()
@@ -39,7 +40,8 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
 chain_id = 1337
 my_address = "0x4f8fACcb4C16A8e5788eCEC16f0B9D2dBBd44B22"
-private_key = "0xc131240d800f565a1ef156de2a12fd6222f6787ceb9c48f7c1e6bc4906a933f2"
+private_key = os.getenv("PRIVATE_KEY")
+# !!!private key is public here because theres no real money, and it is a local chain.
 
 # Create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
@@ -57,3 +59,4 @@ transaction = SimpleStorage.constructor().buildTransaction(
         "gasPrice": w3.eth.gas_price,
     }
 )
+signed_txn = w3.eth.account.sign_transaction(transaction, private_key=private_key)
