@@ -39,9 +39,11 @@ bytecode = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["evm"
 # Get the ABI
 abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 
-# For connecting to Ganache
-w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
-chain_id = 1337
+# For connecting to Ganache/Rinkeby
+w3 = Web3(
+    Web3.HTTPProvider("https://rinkeby.infura.io/v3/16f8d9ba30d545409f52f8da1e44bef3")
+)
+chain_id = 4  # 4 is for Rinkeby Testnet
 my_address = os.getenv("MY_ADDRESS")
 private_key = os.getenv("PRIVATE_KEY")
 # !!!private key is public here because theres no real money, and it is a local chain.
