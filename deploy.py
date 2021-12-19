@@ -1,5 +1,6 @@
 from solcx import compile_standard, install_solc
 import json
+from web3 import Web3
 
 with open("./SimpleStorage.sol", "r") as file:
     simple_storage_file = file.read()
@@ -25,3 +26,34 @@ compiled_sol = compile_standard(
 
 with open("compiled_code.json", "w") as file:
     json.dump(compiled_sol, file)
+
+# Get the bytecode
+bytecode = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["evm"][
+    "bytecode"
+]["object"]
+
+# Get the ABI
+abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
+
+# For connecting to Ganache
+w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
+chain_id = 1337
+my_address = "0x4f8fACcb4C16A8e5788eCEC16f0B9D2dBBd44B22"
+private_key = "0xc131240d800f565a1ef156de2a12fd6222f6787ceb9c48f7c1e6bc4906a933f2"
+
+# Create the contract in python
+SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
+# Get the latest transaction
+nonce = w3.eth.getTransactionCount(my_address)
+
+# 1. Build a transaction
+# 2. Sign a transaction
+# 3. Send a transaction
+transaction = SimpleStorage.constructor().buildTransaction(
+    {
+        "chainId": chain_id,
+        "from": my_address,
+        "nonce": nonce,
+        "gasPrice": w3.eth.gas_price,
+    }
+)
