@@ -2,6 +2,9 @@ from solcx import compile_standard, install_solc
 import json
 from web3 import Web3
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 with open("./SimpleStorage.sol", "r") as file:
     simple_storage_file = file.read()
@@ -60,3 +63,7 @@ transaction = SimpleStorage.constructor().buildTransaction(
     }
 )
 signed_txn = w3.eth.account.sign_transaction(transaction, private_key=private_key)
+# Send this signed transaction
+txh_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+# Wait for block confirmation
+tx_receipt = w3.eth.wait_for_transaction_receipt(txh_hash)
